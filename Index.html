@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ariana Grande | Tienda Oficial</title>
+    
+    <!-- Fuente elegante de Google Fonts (Montserrat e Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Íconos de FontAwesome para el carrito y la lupa -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Archivo de estilos CSS principal -->
+    <link rel="stylesheet" href="estilos/estilos.css">
+</head>
+<body>
+
+    <!-- 1. BARRA DE ANUNCIO SUPERIOR -->
+    <div class="barra-anuncio">
+        <p>ENVÍO GLOBAL DISPONIBLE | TIENDA OFICIAL ARIANA GRANDE</p>
+    </div>
+
+    <!-- 2. ENCABEZADO Y NAVEGACIÓN -->
+    <header class="encabezado">
+        <div class="contenedor-navegacion">
+            <!-- Menú de hamburguesa para celulares -->
+            <button class="boton-menu-movil" id="btn-menu-movil" aria-label="Abrir menú">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+            <!-- Menú de categorías principal -->
+            <nav class="menu-navegacion" id="menu-navegacion">
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#productos" data-categoria="todos">Todos</a></li>
+                    <li><a href="#productos" data-categoria="ropa">Ropa</a></li>
+                    <li><a href="#productos" data-categoria="musica">Música</a></li>
+                    <li><a href="#productos" data-categoria="accesorios">Accesorios</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo central estilo tipográfico de Ariana -->
+            <div class="marca-logo">
+                <a href="index.html" class="logo-texto">ariana grande</a>
+            </div>
+
+            <!-- Íconos de acción (Buscador y Carrito) -->
+            <div class="iconos-header">
+                <button class="btn-icono" id="btn-buscar" aria-label="Buscar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button class="btn-icono btn-carrito" id="btn-abrir-carrito" aria-label="Ver Carrito">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="contador-carrito" id="contador-carrito">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. BANNER PRINCIPAL (HERO SECTION) -->
+    <section class="banner-hero" id="inicio">
+        <div class="contenido-banner">
+            <span class="subtitulo-banner">NUEVA COLECCIÓN</span>
+            <h1 class="titulo-banner">eternal sunshine</h1>
+            <a href="#productos" class="boton-principal">EXPLORAR TIENDA</a>
+        </div>
+    </section>
+
+    <!-- 4. SECCIÓN DE PRODUCTOS -->
+    <main class="seccion-tienda" id="productos">
+        <div class="encabezado-seccion">
+            <h2>COLECCIÓN DESTACADA</h2>
+            <p>Selecciona una categoría para filtrar los artículos</p>
+            
+            <!-- Botones de filtrado rápido -->
+            <div class="filtros-categoria">
+                <button class="btn-filtro activo" data-filtro="todos">Todos</button>
+                <button class="btn-filtro" data-filtro="ropa">Ropa</button>
+                <button class="btn-filtro" data-filtro="musica">Música & Vinilos</button>
+                <button class="btn-filtro" data-filtro="accesorios">Accesorios</button>
+            </div>
+        </div>
+
+        <!-- Contenedor donde JavaScript inyectará los productos automáticamente -->
+        <div class="rejilla-productos" id="contenedor-productos">
+            <!-- JavaScript cargará las tarjetas de productos desde datos/productos.json aquí -->
+        </div>
+    </main>
+
+    <!-- 5. PANEL LATERAL DEL CARRITO DE COMPRAS (DRAWER) -->
+    <div class="overlay-carrito" id="overlay-carrito"></div>
+    <aside class="panel-carrito" id="panel-carrito">
+        <div class="cabecera-carrito">
+            <h3>TU CARRITO (<span id="cantidad-items-carrito">0</span>)</h3>
+            <button class="btn-cerrar-carrito" id="btn-cerrar-carrito">&times;</button>
+        </div>
+
+        <!-- Lista donde se agregarán los ítems seleccionados -->
+        <div class="cuerpo-carrito" id="lista-carrito">
+            <p class="carrito-vacio">Tu carrito está vacío en este momento.</p>
+        </div>
+
+        <!-- Pie del carrito con el total y botón de pago -->
+        <div class="pie-carrito">
+            <div class="subtotal-contenedor">
+                <span>SUBTOTAL:</span>
+                <span class="precio-subtotal" id="precio-subtotal">$0.00</span>
+            </div>
+            <p class="nota-envio">Los impuestos y costos de envío se calculan en el pago.</p>
+            <button class="boton-checkout" id="btn-checkout">PROCEDER AL PAGO</button>
+        </div>
+    </aside>
+
+    <!-- 6. PIE DE PÁGINA (FOOTER) -->
+    <footer class="pie-pagina">
+        <div class="contenedor-footer">
+            <div class="columna-footer newsletter">
+                <h4>ÚNETE AL CLUB</h4>
+                <p>Recibe actualizaciones sobre nuevos lanzamientos, mercancía exclusiva y más.</p>
+                <form class="formulario-newsletter" id="form-newsletter">
+                    <input type="email" placeholder="Ingresa tu correo electrónico" required>
+                    <button type="submit">UNIRSE</button>
+                </form>
+            </div>
+
+            <div class="columna-footer enlaces">
+                <h4>AYUDA</h4>
+                <ul>
+                    <li><a href="#">Seguimiento de pedido</a></li>
+                    <li><a href="#">Política de envíos</a></li>
+                    <li><a href="#">Devoluciones y cambios</a></li>
+                    <li><a href="#">Preguntas frecuentes</a></li>
+                </ul>
+            </div>
+
+            <div class="columna-footer redes">
+                <h4>SÍGUENOS</h4>
+                <div class="iconos-redes">
+                    <a href="https://instagram.com/arianagrande" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://twitter.com/arianagrande" target="_blank" rel="noopener"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a href="https://spotify.com" target="_blank" rel="noopener"><i class="fa-brands fa-spotify"></i></a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="copyright-footer">
+            <p>&copy; 2026 Ariana Grande Official Store. Réplica académica desarrollada con HTML, CSS y JS.</p>
+        </div>
+    </footer>
+
+    <!-- 7. ARCHIVOS DE SCRIPT (JAVASCRIPT) -->
+    <script src="scripts/principal.js"></script>
+    <script src="scripts/carrito.js"></script>
+</body>
+</html>
