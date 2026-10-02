@@ -1,18 +1,7 @@
 // ===== MEGA PACA SHOP: lógica principal =====
 
-// Respaldo por si se abre index.html directo (file://) y el navegador bloquea fetch
-const PRODUCTOS_RESPALDO = [
-    { id: 1, nombre: "Chumpa de mezclilla vintage", categoria: "ropa", precio: 95, emoji: "🧥", color: "#4997D0", etiqueta: "Paca del día" },
-    { id: 2, nombre: "Suéter tejido talla M", categoria: "ropa", precio: 60, emoji: "🧶", color: "#D6403A", etiqueta: "" },
-    { id: 3, nombre: "Jeans clásicos americanos", categoria: "ropa", precio: 75, emoji: "👖", color: "#1E8A5A", etiqueta: "Más pedido" },
-    { id: 4, nombre: "Vestido floral de temporada", categoria: "ropa", precio: 85, emoji: "👗", color: "#F2B600", etiqueta: "" },
-    { id: 5, nombre: "Tenis deportivos de marca", categoria: "calzado", precio: 150, emoji: "👟", color: "#4997D0", etiqueta: "Chilero" },
-    { id: 6, nombre: "Botas de cuero", categoria: "calzado", precio: 180, emoji: "🥾", color: "#D6403A", etiqueta: "" },
-    { id: 7, nombre: "Bolso de mano", categoria: "accesorios", precio: 70, emoji: "👜", color: "#F2B600", etiqueta: "" },
-    { id: 8, nombre: "Gorra de béisbol", categoria: "accesorios", precio: 35, emoji: "🧢", color: "#1E8A5A", etiqueta: "Precio de paca" }
-];
-
-window.PRODUCTOS = [];
+window.PRODUCTOS = typeof PRODUCTOS_DATA !== "undefined" ? PRODUCTOS_DATA : [];
+const faltaProductos = typeof PRODUCTOS_DATA === "undefined";
 let categoriaActual = "todos";
 let textoBusqueda = "";
 
@@ -24,24 +13,15 @@ function formatoQuetzales(valor) {
 window.formatoQuetzales = formatoQuetzales;
 
 // Fondo suave a partir del color del producto
-function fondoSuave(color) {
-    return color + "26"; // ~15% de opacidad
-}
-window.fondoSuave = fondoSuave;
-
-async function cargarProductos() {
-    try {
-        const respuesta = await fetch("datos/productos.json");
-        if (!respuesta.ok) throw new Error("No se pudo leer productos.json");
-        window.PRODUCTOS = await respuesta.json();
-    } catch (error) {
-        console.warn("Usando productos de respaldo:", error.message);
-        window.PRODUCTOS = PRODUCTOS_RESPALDO;
-    }
-    mostrarProductos();
-}
+window.fondoSuave = function (color) {
+    return color + "26";
+};
 
 function mostrarProductos() {
+    if (faltaProductos) {
+        contenedor.innerHTML = '<p class="sin-resultados">No se cargaron los productos. Revisa que exista datos/productos.js y que index.html lo incluya antes de principal.js.</p>';
+        return;
+    }
     const texto = textoBusqueda.trim().toLowerCase();
     const lista = window.PRODUCTOS.filter(p =>
         (categoriaActual === "todos" || p.categoria === categoriaActual) &&
@@ -53,21 +33,34 @@ function mostrarProductos() {
         return;
     }
 
+    // La foto principal se pone encima del emoji; si el archivo no existe, se quita y queda el emoji
     contenedor.innerHTML = lista.map(p => `
-        <article class="tarjeta-producto">
-            <div class="tarjeta-imagen" style="background:${fondoSuave(p.color)}">
-                ${p.etiqueta ? `<span class="etiqueta-producto">${p.etiqueta}</span>` : ""}
+        <article class="tarjeta-producto" data-id="${p.id}">
+            <div class="tarjeta-imagen" style="background:${window.fondoSuave(p.color)}">
                 <span class="emoji" aria-hidden="true">${p.emoji}</span>
+                ${p.imagenes && p.imagenes[0] ? `<img class="foto-tarjeta" src="${p.imagenes[0]}" alt="${p.nombre}" onerror="this.remove()">` : ""}
+                ${p.etiqueta ? `<span class="etiqueta-producto">${p.etiqueta}</span>` : ""}
             </div>
             <div class="tarjeta-info">
                 <h3>${p.nombre}</h3>
                 <p class="tarjeta-categoria">${p.categoria}</p>
                 <p class="tarjeta-precio">${formatoQuetzales(p.precio)}</p>
-                <button class="btn-agregar" data-id="${p.id}">AGREGAR AL CARRITO</button>
+                <button class="btn-agregar" data-id="${p.id}">VER PRODUCTO</button>
             </div>
         </article>
     `).join("");
 }
+
+// Al tocar una tarjeta se abre la ventana emergente (detalle.js)
+contenedor.addEventListener("click", e => {
+    const tarjeta = e.target.closest(".tarjeta-producto");
+    if (!tarjeta) return;
+    if (typeof window.abrirDetalle !== "function") {
+        window.mostrarAviso("Falta el archivo scripts/detalle.js");
+        return;
+    }
+    window.abrirDetalle(Number(tarjeta.dataset.id));
+});
 
 function cambiarCategoria(categoria) {
     categoriaActual = categoria;
@@ -77,39 +70,36 @@ function cambiarCategoria(categoria) {
     mostrarProductos();
 }
 
-// Botones de filtro
 document.querySelectorAll(".btn-filtro").forEach(btn => {
     btn.addEventListener("click", () => cambiarCategoria(btn.dataset.filtro));
 });
 
-// Enlaces del menú con categoría
 const menu = document.getElementById("menu-navegacion");
-menu.querySelectorAll("a[data-categoria]").forEach(enlace => {
+menu?.querySelectorAll("a[data-categoria]").forEach(enlace => {
     enlace.addEventListener("click", () => {
         cambiarCategoria(enlace.dataset.categoria);
-        menu.classList.remove("abierto");
+        menu?.classList.remove("abierto");
     });
 });
 
-// Menú móvil
-document.getElementById("btn-menu-movil").addEventListener("click", () => {
-    menu.classList.toggle("abierto");
+document.getElementById("btn-menu-movil")?.addEventListener("click", () => {
+    menu?.classList.toggle("abierto");
 });
 
 // Búsqueda
 const barraBusqueda = document.getElementById("barra-busqueda");
 const inputBusqueda = document.getElementById("input-busqueda");
-document.getElementById("btn-buscar").addEventListener("click", () => {
-    barraBusqueda.classList.toggle("abierta");
-    if (barraBusqueda.classList.contains("abierta")) inputBusqueda.focus();
+document.getElementById("btn-buscar")?.addEventListener("click", () => {
+    barraBusqueda?.classList.toggle("abierta");
+    if (barraBusqueda?.classList.contains("abierta")) inputBusqueda?.focus();
 });
-inputBusqueda.addEventListener("input", () => {
+inputBusqueda?.addEventListener("input", () => {
     textoBusqueda = inputBusqueda.value;
     mostrarProductos();
     if (textoBusqueda) document.getElementById("productos").scrollIntoView();
 });
 
-// Aviso breve (lo usa también el carrito)
+// Aviso breve (lo usan el carrito y la ventana de detalle)
 let temporizadorAviso;
 window.mostrarAviso = function (mensaje) {
     const aviso = document.getElementById("aviso");
@@ -119,11 +109,10 @@ window.mostrarAviso = function (mensaje) {
     temporizadorAviso = setTimeout(() => aviso.classList.remove("visible"), 2200);
 };
 
-// Newsletter
-document.getElementById("form-newsletter").addEventListener("submit", e => {
+document.getElementById("form-newsletter")?.addEventListener("submit", e => {
     e.preventDefault();
     e.target.reset();
     window.mostrarAviso("¡Listo! Ya eres parte del club.");
 });
 
-cargarProductos();
+mostrarProductos();

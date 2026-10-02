@@ -14,7 +14,6 @@ const contadorPanel = document.getElementById("cantidad-items-carrito");
 const precioSubtotal = document.getElementById("precio-subtotal");
 const botonCheckout = document.getElementById("btn-checkout");
 
-// --- Guardado local ---
 function guardarCarrito() {
     try { localStorage.setItem(CLAVE_CARRITO, JSON.stringify(carrito)); } catch (e) { /* sin almacenamiento */ }
 }
@@ -23,51 +22,60 @@ function cargarCarrito() {
     try { carrito = JSON.parse(localStorage.getItem(CLAVE_CARRITO)) || []; } catch (e) { carrito = []; }
 }
 
-// --- Abrir y cerrar panel ---
 function abrirCarrito() {
-    panel.classList.add("abierto");
-    overlay.classList.add("activo");
+    panel?.classList.add("abierto");
+    overlay?.classList.add("activo");
 }
+window.abrirCarrito = abrirCarrito;
 
 function cerrarCarrito() {
-    panel.classList.remove("abierto");
-    overlay.classList.remove("activo");
+    panel?.classList.remove("abierto");
+    overlay?.classList.remove("activo");
 }
 
-document.getElementById("btn-abrir-carrito").addEventListener("click", abrirCarrito);
-document.getElementById("btn-cerrar-carrito").addEventListener("click", cerrarCarrito);
-overlay.addEventListener("click", cerrarCarrito);
+document.getElementById("btn-abrir-carrito")?.addEventListener("click", abrirCarrito);
+document.getElementById("btn-cerrar-carrito")?.addEventListener("click", cerrarCarrito);
+overlay?.addEventListener("click", cerrarCarrito);
 document.addEventListener("keydown", e => { if (e.key === "Escape") cerrarCarrito(); });
 
-// --- Operaciones ---
-function agregarAlCarrito(id) {
+// Un mismo producto en tallas distintas cuenta como ítems separados
+function claveItem(id, talla) {
+    return id + "-" + (talla || "unica");
+}
+
+function agregarAlCarrito(id, talla) {
     const producto = window.PRODUCTOS.find(p => p.id === id);
     if (!producto) return;
 
-    const existente = carrito.find(item => item.id === id);
+    const clave = claveItem(id, talla);
+    const existente = carrito.find(item => item.clave === clave);
     if (existente) {
         existente.cantidad++;
     } else {
-        carrito.push({ id: producto.id, nombre: producto.nombre, precio: producto.precio, emoji: producto.emoji, color: producto.color, cantidad: 1 });
+        carrito.push({
+            clave, id: producto.id, nombre: producto.nombre, talla: talla || null,
+            precio: producto.precio, emoji: producto.emoji, color: producto.color,
+            foto: producto.imagenes && producto.imagenes[0] ? producto.imagenes[0] : "", cantidad: 1
+        });
     }
     actualizarCarrito();
     window.mostrarAviso(`${producto.nombre} agregado al carrito`);
 }
+window.agregarAlCarrito = agregarAlCarrito;
 
-function cambiarCantidad(id, cambio) {
-    const item = carrito.find(i => i.id === id);
+function cambiarCantidad(clave, cambio) {
+    const item = carrito.find(i => i.clave === clave);
     if (!item) return;
     item.cantidad += cambio;
-    if (item.cantidad <= 0) quitarDelCarrito(id);
+    if (item.cantidad <= 0) quitarDelCarrito(clave);
     else actualizarCarrito();
 }
 
-function quitarDelCarrito(id) {
-    carrito = carrito.filter(i => i.id !== id);
+function quitarDelCarrito(clave) {
+    carrito = carrito.filter(i => i.clave !== clave);
     actualizarCarrito();
 }
 
-// --- Pintar el carrito ---
 function actualizarCarrito() {
     const totalItems = carrito.reduce((suma, i) => suma + i.cantidad, 0);
     const subtotal = carrito.reduce((suma, i) => suma + i.precio * i.cantidad, 0);
@@ -82,44 +90,41 @@ function actualizarCarrito() {
     } else {
         listaCarrito.innerHTML = carrito.map(item => `
             <div class="item-carrito">
-                <div class="item-miniatura" style="background:${window.fondoSuave(item.color)}" aria-hidden="true">${item.emoji}</div>
+                <div class="item-miniatura" style="background:${window.fondoSuave(item.color)}" aria-hidden="true">
+                    <span>${item.emoji}</span>
+                    ${item.foto ? `<img src="${item.foto}" alt="" onerror="this.remove()">` : ""}
+                </div>
                 <div class="item-detalle">
                     <h4>${item.nombre}</h4>
+                    ${item.talla ? `<p class="item-precio">Talla: ${item.talla}</p>` : ""}
                     <p class="item-precio">${window.formatoQuetzales(item.precio)}</p>
                     <div class="control-cantidad">
-                        <button data-accion="menos" data-id="${item.id}" aria-label="Quitar uno">&minus;</button>
+                        <button data-accion="menos" data-clave="${item.clave}" aria-label="Quitar uno">&minus;</button>
                         <span>${item.cantidad}</span>
-                        <button data-accion="mas" data-id="${item.id}" aria-label="Agregar uno">+</button>
+                        <button data-accion="mas" data-clave="${item.clave}" aria-label="Agregar uno">+</button>
                     </div>
                 </div>
-                <button class="btn-quitar" data-accion="quitar" data-id="${item.id}">Quitar</button>
+                <button class="btn-quitar" data-accion="quitar" data-clave="${item.clave}">Quitar</button>
             </div>
         `).join("");
     }
     guardarCarrito();
 }
 
-// --- Eventos por delegación ---
-// Botones "Agregar" de las tarjetas
-document.getElementById("contenedor-productos").addEventListener("click", e => {
-    const boton = e.target.closest(".btn-agregar");
-    if (boton) agregarAlCarrito(Number(boton.dataset.id));
-});
-
-// Botones dentro del panel
-listaCarrito.addEventListener("click", e => {
+listaCarrito?.addEventListener("click", e => {
     const boton = e.target.closest("button[data-accion]");
     if (!boton) return;
-    const id = Number(boton.dataset.id);
-    if (boton.dataset.accion === "mas") cambiarCantidad(id, 1);
-    if (boton.dataset.accion === "menos") cambiarCantidad(id, -1);
-    if (boton.dataset.accion === "quitar") quitarDelCarrito(id);
+    const clave = boton.dataset.clave;
+    if (boton.dataset.accion === "mas") cambiarCantidad(clave, 1);
+    if (boton.dataset.accion === "menos") cambiarCantidad(clave, -1);
+    if (boton.dataset.accion === "quitar") quitarDelCarrito(clave);
 });
 
-// --- Pedido por WhatsApp ---
-botonCheckout.addEventListener("click", () => {
+// Pedido por WhatsApp (incluye la talla)
+botonCheckout?.addEventListener("click", () => {
     if (carrito.length === 0) return;
-    const lineas = carrito.map(i => `• ${i.cantidad} x ${i.nombre} (${window.formatoQuetzales(i.precio * i.cantidad)})`);
+    const lineas = carrito.map(i =>
+        `• ${i.cantidad} x ${i.nombre}${i.talla ? " (talla " + i.talla + ")" : ""} - ${window.formatoQuetzales(i.precio * i.cantidad)}`);
     const total = carrito.reduce((suma, i) => suma + i.precio * i.cantidad, 0);
     const mensaje = `Hola, quiero hacer este pedido en Mega Paca Shop:\n${lineas.join("\n")}\nTotal: ${window.formatoQuetzales(total)}`;
     window.open(`https://wa.me/${WHATSAPP_TIENDA}?text=${encodeURIComponent(mensaje)}`, "_blank", "noopener");
