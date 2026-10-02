@@ -20,20 +20,20 @@ const PRODUCTOS_DATA = [
         tallas: ["XS", "S", "M", "L", "XL"],
         descripcion: "Chumpa de mezclilla azul oscuro con cierre y cuello alto. Ropa americana en excelente estado.",
         imagenes: [
-            "imagenes/ropa/chumpa-mezclilla-1.jpg",
-            "imagenes/ropa/chumpa-mezclilla-2.jpg",
-            "imagenes/ropa/chumpa-mezclilla-3.jpg"
+            "imagenes/ropa/chumpa vintage.webp",
+            "imagenes/ropa/chumpa vintage 2.webp",
+            "imagenes/ropa/chumpa vintage 3.webp"
         ]
     },
     {
-        id: 2, nombre: "Suéter tejido", categoria: "ropa", precio: 60,
+        id: 2, nombre: "Suéter tejido", categoria: "ropa", precio: 67,
         emoji: "🧶", color: "#D6403A", etiqueta: "",
         tallas: ["S", "M", "L", "XL"],
         descripcion: "Suéter tejido grueso, calientito para las mañanas frías de Xela o la capital.",
         imagenes: [
-            "imagenes/ropa/sueter-tejido-1.jpg",
-            "imagenes/ropa/sueter-tejido-2.jpg",
-            "imagenes/ropa/sueter-tejido-3.jpg"
+            "imagenes/ropa/sueter1.webp",
+            "imagenes/ropa/sueter2.webp",
+            "imagenes/ropa/sueter3.webp"
         ]
     },
     {
