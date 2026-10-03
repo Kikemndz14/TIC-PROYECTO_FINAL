@@ -1,7 +1,7 @@
 // ===== MEGA PACA SHOP: carrito de compras =====
 
 // Cambia este número por el WhatsApp real de la tienda (código de país + número)
-const WHATSAPP_TIENDA = "50200000000";
+const WHATSAPP_TIENDA = "50253571775";
 const CLAVE_CARRITO = "megapaca_carrito";
 
 let carrito = [];

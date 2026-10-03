@@ -42,9 +42,9 @@ const PRODUCTOS_DATA = [
         tallas: ["28", "30", "32", "34", "36"],
         descripcion: "Jeans de corte clásico, mezclilla resistente y cómoda. Ideales para todos los días.",
         imagenes: [
-            "imagenes/ropa/jeans-clasicos-1.jpg",
-            "imagenes/ropa/jeans-clasicos-2.jpg",
-            "imagenes/ropa/jeans-clasicos-3.jpg"
+            "imagenes/ropa/jeans1.webp",
+            "imagenes/ropa/jeans2.webp",
+            "imagenes/ropa/jeans3.webp"
         ]
     },
     {
@@ -53,9 +53,9 @@ const PRODUCTOS_DATA = [
         tallas: ["XS", "S", "M", "L"],
         descripcion: "Vestido floral ligero, perfecto para salidas y fiestas.",
         imagenes: [
-            "imagenes/ropa/vestido-floral-1.jpg",
-            "imagenes/ropa/vestido-floral-2.jpg",
-            "imagenes/ropa/vestido-floral-3.jpg"
+            "imagenes/ropa/vestido1.webp",
+            "imagenes/ropa/vestido2.webp",
+            "imagenes/ropa/vestido3.webp"
         ]
     },
     {
@@ -64,8 +64,8 @@ const PRODUCTOS_DATA = [
         tallas: ["36", "37", "38", "39", "40", "41", "42"],
         descripcion: "Tenis deportivos de marca en muy buen estado, suela firme y cómoda.",
         imagenes: [
-            "imagenes/calzado/tenis-deportivos-1.jpg",
-            "imagenes/calzado/tenis-deportivos-2.jpg"
+            "imagenes/calzado/tennis 1.webp",
+            "imagenes/calzado/tennis 2.webp"
         ]
     },
     {
@@ -74,8 +74,8 @@ const PRODUCTOS_DATA = [
         tallas: ["37", "38", "39", "40", "41", "42"],
         descripcion: "Botas de cuero resistentes, hechas para durar.",
         imagenes: [
-            "imagenes/calzado/botas-cuero-1.jpg",
-            "imagenes/calzado/botas-cuero-2.jpg"
+            "imagenes/calzado/botas cuero 1.webp",
+            "imagenes/calzado/botas cuero 2.webp"
         ]
     },
     {
@@ -84,8 +84,8 @@ const PRODUCTOS_DATA = [
         tallas: [],
         descripcion: "Bolso de mano con espacio para lo esencial. Talla única.",
         imagenes: [
-            "imagenes/accesorios/bolso-mano-1.jpg",
-            "imagenes/accesorios/bolso-mano-2.jpg"
+            "imagenes/accesorios/bolsa 1.webp",
+            "imagenes/accesorios/bolso 2.webp"
         ]
     },
     {
@@ -94,8 +94,8 @@ const PRODUCTOS_DATA = [
         tallas: [],
         descripcion: "Gorra de béisbol ajustable. Talla única.",
         imagenes: [
-            "imagenes/accesorios/gorra-beisbol-1.jpg",
-            "imagenes/accesorios/gorra-beisbol-2.jpg"
+            "imagenes/accesorios/gorra 1.webp",
+            "imagenes/accesorios/gorra 2.webp"
         ]
     }
 ];
