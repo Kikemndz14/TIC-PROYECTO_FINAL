@@ -85,7 +85,7 @@ const PRODUCTOS_DATA = [
         descripcion: "Bolso de mano con espacio para lo esencial. Talla única.",
         imagenes: [
             "imagenes/accesorios/bolsa 1.webp",
-            "imagenes/accesorios/bolso 2.webp"
+            "imagenes/accesorios/bolsa 2.webp"
         ]
     },
     {
